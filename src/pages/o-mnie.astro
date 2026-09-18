@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../lib/site';
+import { breadcrumbSchema, jsonLd, personSchema, websiteSchema } from '../lib/schema';
+
+const crumbs = [
+  { name: 'Strona główna', path: '/' },
+  { name: 'O stronie' },
+];
+---
+
+<BaseLayout
+  title="O stronie"
+  description="Czym jest CyberWnuczek, skąd biorą się porady i jak zgłaszać poprawki."
+  canonicalPath="/o-mnie"
+  jsonLd={jsonLd([
+    websiteSchema(),
+    { '@context': 'https://schema.org', ...personSchema() },
+    breadcrumbSchema([
+      { name: 'Strona główna', path: '/' },
+      { name: 'O stronie', path: '/o-mnie' },
+    ]),
+  ])}
+>
+  <Breadcrumbs items={crumbs} />
+  <article class="content">
+    <h1 class="page-title">O CyberWnuczku</h1>
+    <p>
+      <strong>CyberWnuczek</strong> to zbiór prostych poradników o bezpieczeństwie w
+      internecie. Ma działać jak spokojny telefon do wnuczka: bez straszenia, bez
+      żargonu, z konkretnym „zrób tak”.
+    </p>
+    <h2>Dla kogo to jest</h2>
+    <p>
+      Dla osób, które chcą korzystać z maila, banku i smartfona bez zgadywania. I dla
+      rodzin, które wolą wysłać jeden jasny link zamiast tłumaczyć to samo przy każdym
+      niedzielnym obiedzie.
+    </p>
+    <h2>Skąd biorą się zasady</h2>
+    <p>
+      Opieramy się na publicznych materiałach m.in. CERT Polska, NASK i UOKiK. Jeśli
+      urząd albo bank zmieni zalecenie, aktualizujemy tekst i datę na górze artykułu.
+    </p>
+    <div class="note">
+      <p>
+        To nie jest infolinia banku ani policji. W nagłym oszustwie dzwoń na numer
+        podany przez Twój bank albo 112.
+      </p>
+    </div>
+    <h2>Kontakt</h2>
+    <p>
+      Poprawki i pomysły na kolejne tematy: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    </p>
+  </article>
+</BaseLayout>

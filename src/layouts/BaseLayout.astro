@@ -1,0 +1,97 @@
+---
+import '../styles/global.css';
+import { SITE } from '../lib/site';
+
+type Props = {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  jsonLd?: string;
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+};
+
+const {
+  title,
+  description,
+  canonicalPath,
+  jsonLd,
+  noindex = false,
+  ogType = 'website',
+} = Astro.props;
+
+const pageTitle = title === SITE.name ? SITE.name : `${title} | ${SITE.name}`;
+const canonical = new URL(canonicalPath, SITE.url).toString();
+const gsc = import.meta.env.PUBLIC_GSC_VERIFICATION;
+const ga = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+---
+
+<!doctype html>
+<html lang={SITE.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta name="twitter:card" content="summary" />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+    {gsc && <meta name="google-site-verification" content={gsc} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+    {
+      ga && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga}`}></script>
+          <script is:inline define:vars={{ ga }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              window.dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', ga, { anonymize_ip: true });
+          </script>
+        </>
+      )
+    }
+  </head>
+  <body>
+    <a class="skip-link" href="#tresc">Przejdź do treści</a>
+    <header class="site-header">
+      <div class="wrap site-header__inner">
+        <a class="logo" href="/">{SITE.name}</a>
+        <nav class="nav" aria-label="Główne">
+          <a href="/poradniki">Poradniki</a>
+          <a href="/tematy/oszustwa-internetowe">Oszustwa</a>
+          <a href="/tematy/hasla-i-konta">Hasła</a>
+          <a href="/tematy/bankowosc-online">Bankowość</a>
+          <a href="/tematy/smartfon">Smartfon</a>
+          <a href="/o-mnie">O stronie</a>
+        </nav>
+      </div>
+    </header>
+    <main id="tresc" class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <nav aria-label="Stopka">
+          <a href="/">Strona główna</a>
+          <a href="/poradniki">Poradniki</a>
+          <a href="/o-mnie">O stronie</a>
+          <a href="/rss.xml">RSS</a>
+        </nav>
+        <p>
+          {SITE.name} — {SITE.tagline}
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

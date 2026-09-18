@@ -1,0 +1,17 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { articlePath } from '../lib/site';
+
+const { article } = Astro.props as { article: CollectionEntry<'articles'> };
+const date = article.data.updatedDate ?? article.data.pubDate;
+---
+
+<a class="card" href={articlePath(article.id)}>
+  <h3>{article.data.title}</h3>
+  <p>{article.data.description}</p>
+  <p class="meta">
+    <time datetime={date.toISOString()}>
+      {date.toLocaleDateString('pl-PL')}
+    </time>
+  </p>
+</a>

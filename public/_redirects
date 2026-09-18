@@ -1,0 +1,3 @@
+# www is canonical: Aftermarket has no ALIAS/ANAME for apex → pages.dev.
+https://cyber-wnuczek.pl/* https://www.cyber-wnuczek.pl/:splat 301
+https://cyber-wnuczek.pl https://www.cyber-wnuczek.pl 301

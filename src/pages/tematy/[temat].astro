@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { TOPICS, isTopicId, topicPath, type TopicId } from '../../lib/site';
+import { breadcrumbSchema, jsonLd, topicSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return Object.keys(TOPICS).map((temat) => ({ params: { temat } }));
+}
+
+const { temat } = Astro.params;
+
+if (!temat || !isTopicId(temat)) {
+  throw new Error(`Nieznany temat: ${temat}`);
+}
+
+const topicId = temat as TopicId;
+const topic = TOPICS[topicId];
+const articles = (
+  await getCollection(
+    'articles',
+    ({ data }) => !data.draft && data.topic === topicId,
+  )
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const crumbs = [
+  { name: 'Strona główna', path: '/' },
+  { name: topic.title },
+];
+---
+
+<BaseLayout
+  title={topic.title}
+  description={topic.description}
+  canonicalPath={topicPath(topicId)}
+  jsonLd={jsonLd([
+    topicSchema(topicId, new URL(topicPath(topicId), Astro.site).toString()),
+    breadcrumbSchema([
+      { name: 'Strona główna', path: '/' },
+      { name: topic.title, path: topicPath(topicId) },
+    ]),
+  ])}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="hero">
+    <h1>{topic.title}</h1>
+    <p class="lede">{topic.description}</p>
+  </section>
+  <section class="article-list">
+    {
+      articles.length ? (
+        articles.map((article) => <ArticleCard article={article} />)
+      ) : (
+        <p>W tym temacie wkrótce pojawią się poradniki.</p>
+      )
+    }
+  </section>
+</BaseLayout>

@@ -1,0 +1,72 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import { TOPICS, articlePath, topicPath } from '../../lib/site';
+import {
+  articleSchema,
+  breadcrumbSchema,
+  faqSchema,
+  jsonLd,
+} from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const topic = TOPICS[article.data.topic];
+const published = article.data.pubDate;
+const updated = article.data.updatedDate ?? published;
+const crumbs = [
+  { name: 'Strona główna', path: '/' },
+  { name: topic.title, path: topicPath(article.data.topic) },
+  { name: article.data.title },
+];
+---
+
+<BaseLayout
+  title={article.data.title}
+  description={article.data.description}
+  canonicalPath={articlePath(article.id)}
+  ogType="article"
+  jsonLd={jsonLd([
+    articleSchema({
+      title: article.data.title,
+      description: article.data.description,
+      slug: article.id,
+      pubDate: published,
+      updatedDate: article.data.updatedDate,
+      topic: article.data.topic,
+    }),
+    breadcrumbSchema([
+      { name: 'Strona główna', path: '/' },
+      { name: topic.title, path: topicPath(article.data.topic) },
+      { name: article.data.title, path: articlePath(article.id) },
+    ]),
+    faqSchema(article.data.faq),
+  ])}
+>
+  <Breadcrumbs items={crumbs} />
+  <article class="content">
+    <p class="meta">
+      <a href={topicPath(article.data.topic)}>{topic.title}</a>
+      ·
+      <time datetime={updated.toISOString()}>
+        Aktualizacja: {updated.toLocaleDateString('pl-PL')}
+      </time>
+    </p>
+    <h1 class="page-title">{article.data.title}</h1>
+    <Content />
+    <Faq items={article.data.faq} />
+    <p>
+      Więcej w temacie: <a href={topicPath(article.data.topic)}>{topic.title}</a>.
+    </p>
+  </article>
+</BaseLayout>
