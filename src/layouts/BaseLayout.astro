@@ -28,7 +28,11 @@ const ogImageUrl = ogImage ? new URL(ogImage, SITE.url).toString() : undefined;
 
 const pageTitle = documentTitle(title);
 const canonical = new URL(canonicalPath, SITE.url).toString();
-const gsc = import.meta.env.PUBLIC_GSC_VERIFICATION;
+const GSC_VERIFICATION = '2dhOjXhiXNpMcZpk_e74wzMGAMe_lAK2X3mKyz0hB2I';
+const envGsc = import.meta.env.PUBLIC_GSC_VERIFICATION?.trim();
+const gscTokens = [GSC_VERIFICATION, envGsc].filter(
+  (token, index, all): token is string => Boolean(token) && all.indexOf(token) === index,
+);
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const globalJsonLd = toJsonLd(globalSchema());
 
@@ -63,7 +67,7 @@ function isCurrent(href: string) {
     }
     {!ogImageUrl && <meta name="twitter:card" content="summary" />}
     {noindex && <meta name="robots" content="noindex,follow" />}
-    {gsc && <meta name="google-site-verification" content={gsc} />}
+    {gscTokens.map((token) => <meta name="google-site-verification" content={token} />)}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
     <script type="application/ld+json" set:html={globalJsonLd} />
