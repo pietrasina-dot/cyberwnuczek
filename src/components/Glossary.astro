@@ -1,0 +1,24 @@
+---
+const { items } = Astro.props as {
+  items: { term: string; definition: string }[];
+};
+---
+
+{
+  items.length > 0 && (
+    <section class="glossary" aria-labelledby="slownik">
+      <h2 id="slownik">Słownik pojęć</h2>
+      <p>
+        Te słowa pojawiły się w tym poradniku. Jedno zdanie, zwykłym językiem.
+      </p>
+      <dl>
+        {items.map((item) => (
+          <div class="glossary__item">
+            <dt>{item.term}</dt>
+            <dd>{item.definition}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
+}

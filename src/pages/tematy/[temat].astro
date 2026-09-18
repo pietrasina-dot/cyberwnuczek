@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
-import { TOPICS, isTopicId, topicPath, type TopicId } from '../../lib/site';
+import { TOPICS, isTopicId, topicPath, otherTopics, articlePath, type TopicId } from '../../lib/site';
 import { breadcrumbSchema, jsonLd, topicSchema } from '../../lib/schema';
 
 export function getStaticPaths() {
@@ -24,6 +24,8 @@ const articles = (
     ({ data }) => !data.draft && data.topic === topicId,
   )
 ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const articleById = new Map(articles.map((article) => [article.id, article]));
+const relatedTopics = otherTopics(topicId);
 
 const crumbs = [
   { name: 'Strona główna', path: '/' },
@@ -32,7 +34,7 @@ const crumbs = [
 ---
 
 <BaseLayout
-  title={topic.title}
+  title={topic.seoTitle}
   description={topic.description}
   canonicalPath={topicPath(topicId)}
   jsonLd={jsonLd([
@@ -45,10 +47,39 @@ const crumbs = [
 >
   <Breadcrumbs items={crumbs} />
   <section class="hero">
+    <p class="eyebrow">Poradniki w tym temacie</p>
     <h1>{topic.title}</h1>
-    <p class="lede">{topic.description}</p>
+    <p class="lede">{topic.intro}</p>
   </section>
-  <section class="article-list">
+
+  <section class="section" aria-labelledby="w-tym-temacie">
+    <h2 id="w-tym-temacie">Co jest w tym przewodniku</h2>
+    <div class="grid">
+      {
+        topic.sections.map((section) => {
+          const article = articleById.get(section.articleId);
+          if (!article) {
+            return (
+              <div class="card">
+                <h3>{section.heading}</h3>
+                <p>{section.teaser}</p>
+              </div>
+            );
+          }
+          return (
+            <a class="card" href={articlePath(article.id)}>
+              <h3>{section.heading}</h3>
+              <p>{section.teaser}</p>
+              <p class="card__more">Czytaj poradnik</p>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <section class="article-list" aria-labelledby="poradniki-tematu">
+    <h2 id="poradniki-tematu">Poradniki w temacie</h2>
     {
       articles.length ? (
         articles.map((article) => <ArticleCard article={article} />)
@@ -56,5 +87,19 @@ const crumbs = [
         <p>W tym temacie wkrótce pojawią się poradniki.</p>
       )
     }
+  </section>
+
+  <section class="section" aria-labelledby="inne-tematy">
+    <h2 id="inne-tematy">Inne tematy</h2>
+    <div class="grid">
+      {
+        relatedTopics.map((id) => (
+          <a class="card card--topic" href={topicPath(id)}>
+            <h3>{TOPICS[id].title}</h3>
+            <p>{TOPICS[id].intro}</p>
+          </a>
+        ))
+      }
+    </div>
   </section>
 </BaseLayout>

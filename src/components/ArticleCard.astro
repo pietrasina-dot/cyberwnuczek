@@ -7,6 +7,18 @@ const date = article.data.updatedDate ?? article.data.pubDate;
 ---
 
 <a class="card" href={articlePath(article.id)}>
+  {
+    article.data.image && article.data.imageAlt && (
+      <img
+        class:list={[
+          'card__img',
+          article.data.imageKind === 'illustration' && 'card__img--illustration',
+        ]}
+        src={article.data.image}
+        alt={article.data.imageAlt}
+      />
+    )
+  }
   <h3>{article.data.title}</h3>
   <p>{article.data.description}</p>
   <p class="meta">
@@ -14,4 +26,5 @@ const date = article.data.updatedDate ?? article.data.pubDate;
       {date.toLocaleDateString('pl-PL')}
     </time>
   </p>
+  <span class="card__more">Czytaj poradnik</span>
 </a>

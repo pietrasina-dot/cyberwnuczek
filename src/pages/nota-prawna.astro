@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { breadcrumbSchema, jsonLd, webPageSchema } from '../lib/schema';
+
+const title = 'Nota prawna — materiały edukacyjne';
+const description =
+  'Nota prawna CyberWnuczka: to materiały edukacyjne o oszustwach i ustawieniach, nie infolinia banku, policji, CERT ani kancelarii. W nagłej sprawie dzwoń 112.';
+
+const crumbs = [
+  { name: 'Strona główna', path: '/' },
+  { name: 'Nota prawna' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/nota-prawna"
+  jsonLd={jsonLd([
+    webPageSchema({
+      name: title,
+      description,
+      path: '/nota-prawna',
+      dateModified: '2026-09-18',
+    }),
+    breadcrumbSchema([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Nota prawna', path: '/nota-prawna' },
+    ]),
+  ])}
+>
+  <Breadcrumbs items={crumbs} />
+  <article class="content">
+    <h1 class="page-title">Nota prawna</h1>
+    <p class="meta">Ostatnia aktualizacja: 18 września 2026</p>
+    <p>
+      Treści na CyberWnuczku są <strong>materiałem edukacyjnym</strong>. Mają
+      pomóc zrozumieć typowe oszustwa i bezpieczniejsze ustawienia. To nie jest
+      porada prawna, podatkowa, inwestycyjna ani zastępstwo banku, CERT, UOKiK
+      albo policji.
+    </p>
+
+    <h2>W nagłej sytuacji</h2>
+    <p>
+      Gdy ktoś wyłudza pieniądze albo masz otwarty przelew: dzwoń na numer ze
+      strony swojego banku albo <strong>112</strong>. Nie czekaj na artykuł z
+      tej strony. Jak wygląda typowy scenariusz, opisuje poradnik
+      <a href="/poradniki/jak-rozpoznac-oszustwo-na-wnuczka">oszustwo na wnuczka</a>.
+    </p>
+
+    <h2>Źródła i aktualność</h2>
+    <p>
+      Opieramy się na publicznych materiałach m.in.
+      <a href="https://cert.pl">CERT Polska</a>
+      (zespół w NASK),
+      <a href="https://www.nask.pl">NASK</a> i
+      <a href="https://uokik.gov.pl">UOKiK</a>.
+      Zalecenia urzędów i banków się zmieniają. Data przy poradniku to data
+      naszej aktualizacji, nie gwarancja, że nic się od tamtej pory nie zmieniło.
+      W razie sprzeczności wiąże informacja z Twojego banku albo urzędu.
+    </p>
+    <h2>Jak korzystamy z materiałów CERT, NASK i UOKiK</h2>
+    <p>
+      Wolno nam <strong>linkować</strong> oficjalne strony i krótko
+      parafrazować zasady z podaniem źródła. Nie kopiujemy całych publikacji,
+      nie wstawiamy logo i nie sugerujemy partnerstwa, patronatu ani tego, że
+      jesteśmy infolinią CERT. Raporty CERT bywają na licencji CC BY; poradnik
+      NASK dla seniorów — CC BY-NC. Artykuły na cert.pl nie mają osobnej zgody
+      na przedruk, więc zostajemy przy linku i własnym skrócie. UOKiK zezwala na
+      ponowne wykorzystanie swoich stron przy podaniu dokładnego linku i daty
+      pozyskania (tu: 18 września 2026). Szczegóły:
+      <a
+        href="https://uokik.gov.pl/public/index.php/bip/wnioskowanie-o-dostep-do-informacji-sektora-publicznego-w-celu-jej-ponownego-wykorzystywania"
+        >warunki UOKiK</a
+      >
+      i
+      <a href="https://nask.pl/patronaty/">zasady logo NASK</a>.
+    </p>
+
+    <h2>Brak oferty i braku zbierania kontaktów</h2>
+    <p>
+      Serwis nie sprzedaje usług, nie prowadzi infolinii i
+      <a href="/polityka-prywatnosci">nie zbiera maili ani formularzy</a>.
+    </p>
+
+    <h2>Oznaczenia</h2>
+    <p>
+      Nazwy banków, systemów (np. BLIK) i urzędów występują wyłącznie w celu
+      opisu. Nie jesteśmy ich partnerem, chyba że dany artykuł wyraźnie wskaże
+      inaczej.
+    </p>
+  </article>
+</BaseLayout>

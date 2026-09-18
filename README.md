@@ -32,8 +32,7 @@ Build produkcyjny: `npm run build`.
 
 Zmienne opcjonalne (Settings → Environment variables):
 
-- `PUBLIC_GSC_VERIFICATION` — token z Google Search Console
-- `PUBLIC_GA_MEASUREMENT_ID` — np. `G-XXXXXXXX`, jeśli chcesz GA4
+- `PUBLIC_GSC_VERIFICATION` — token z Google Search Console (weryfikacja właściciela, nie analityka użytkowników)
 
 Po pierwszym deploju: GSC → weryfikacja domeny lub meta tag + sitemap `https://www.cyber-wnuczek.pl/sitemap-index.xml`.
 

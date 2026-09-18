@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { SITE } from '../lib/site';
-import { breadcrumbSchema, jsonLd, personSchema, websiteSchema } from '../lib/schema';
+import { breadcrumbSchema, jsonLd, webPageSchema } from '../lib/schema';
+
+const title = 'O CyberWnuczku — skąd biorą się porady';
+const description =
+  'CyberWnuczek to nie firma i nie infolinia, tylko zbiór poradników o oszustwach, hasłach, banku i smartfonie. Bez newslettera i bez zbierania maili.';
 
 const crumbs = [
   { name: 'Strona główna', path: '/' },
@@ -11,12 +14,16 @@ const crumbs = [
 ---
 
 <BaseLayout
-  title="O stronie"
-  description="Czym jest CyberWnuczek, skąd biorą się porady i jak zgłaszać poprawki."
+  title={title}
+  description={description}
   canonicalPath="/o-mnie"
   jsonLd={jsonLd([
-    websiteSchema(),
-    { '@context': 'https://schema.org', ...personSchema() },
+    webPageSchema({
+      name: title,
+      description,
+      path: '/o-mnie',
+      type: 'AboutPage',
+    }),
     breadcrumbSchema([
       { name: 'Strona główna', path: '/' },
       { name: 'O stronie', path: '/o-mnie' },
@@ -39,18 +46,52 @@ const crumbs = [
     </p>
     <h2>Skąd biorą się zasady</h2>
     <p>
-      Opieramy się na publicznych materiałach m.in. CERT Polska, NASK i UOKiK. Jeśli
-      urząd albo bank zmieni zalecenie, aktualizujemy tekst i datę na górze artykułu.
+      Opieramy się na publicznych materiałach, nie na współpracy z urzędem.
+      Linkujemy konkretne publikacje i parafrazujemy zasady. Nie kopiujemy całych
+      dokumentów i nie używamy logo CERT, NASK ani UOKiK. Jeśli urząd albo bank
+      zmieni zalecenie, aktualizujemy tekst i datę na górze artykułu.
     </p>
+    <ul>
+      <li>
+        <a href="https://wiedza.cert.pl/bezpieczenstwo-osobiste/rozpoznanie-phishingu/">Phishing: jak rozpoznać oszustwo</a>
+        — CERT Polska
+      </li>
+      <li>
+        <a href="https://cert.pl/posts/2023/02/scam-anydesk/">Ataki socjotechniczne (AnyDesk)</a>
+        — CERT Polska
+      </li>
+      <li>
+        <a href="https://cert.pl/baza-wiedzy/falszywi-konsultanci/">Fałszywi konsultanci</a>
+        — CERT Polska
+      </li>
+      <li>
+        <a href="https://www.nask.pl/media/2024/11/Poradnik__Halo__Tu_cyberbezpieczny_Senior.pdf">Poradnik „#Halo! Tu cyberbezpieczny Senior”</a>
+        — NASK
+      </li>
+      <li>
+        <a href="https://finanse.uokik.gov.pl/nieautoryzowane-transakcje/stracisz-dane-stracisz-pieniadze-jak-nie-pasc-ofiara-oszustow/">Stracisz dane, stracisz pieniądze</a>
+        — UOKiK
+      </li>
+    </ul>
     <div class="note">
       <p>
-        To nie jest infolinia banku ani policji. W nagłym oszustwie dzwoń na numer
-        podany przez Twój bank albo 112.
+        To nie jest infolinia banku ani policji. Nie jesteśmy firmą z punktem obsługi.
+        W nagłym oszustwie dzwoń na numer podany przez Twój bank albo 112. Szczegóły:
+        <a href="/nota-prawna">nota prawna</a>.
       </p>
     </div>
-    <h2>Kontakt</h2>
+    <h2>Bez zbierania kontaktów</h2>
     <p>
-      Poprawki i pomysły na kolejne tematy: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      Nie prowadzimy newslettera, nie mamy formularza i nie prosimy o e-mail.
+      <a href="/polityka-prywatnosci">Polityka prywatności</a> opisuje, czego
+      strona nie zbiera.
     </p>
+    <h2>Poradniki według tematu</h2>
+    <ul>
+      <li><a href="/tematy/oszustwa-internetowe">Oszustwa internetowe</a></li>
+      <li><a href="/tematy/hasla-i-konta">Hasła i konta</a></li>
+      <li><a href="/tematy/bankowosc-online">Bankowość online</a></li>
+      <li><a href="/tematy/smartfon">Smartfon</a></li>
+    </ul>
   </article>
 </BaseLayout>

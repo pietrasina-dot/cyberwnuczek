@@ -9,8 +9,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   noindex
 >
   <section class="hero">
+    <p class="eyebrow">Błąd 404</p>
     <h1>Nie ma takiej strony.</h1>
     <p class="lede">Może poradnik zmienił adres. Wróć na stronę główną i wybierz temat.</p>
-    <p><a class="button" href="/">Strona główna</a></p>
+    <p class="hero__actions">
+      <a class="button" href="/">Strona główna</a>
+      <a class="button button--ghost" href="/poradniki">Wszystkie poradniki</a>
+    </p>
   </section>
 </BaseLayout>

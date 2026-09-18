@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
+import Glossary from '../../components/Glossary.astro';
 import { TOPICS, articlePath, topicPath } from '../../lib/site';
 import {
   articleSchema,
@@ -24,6 +25,19 @@ const { Content } = await render(article);
 const topic = TOPICS[article.data.topic];
 const published = article.data.pubDate;
 const updated = article.data.updatedDate ?? published;
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+
+const relatedIds = new Set(article.data.related);
+const related = allArticles
+  .filter((item) => item.id !== article.id)
+  .filter((item) => relatedIds.has(item.id) || item.data.topic === article.data.topic)
+  .sort((a, b) => {
+    const aPinned = relatedIds.has(a.id) ? 0 : 1;
+    const bPinned = relatedIds.has(b.id) ? 0 : 1;
+    return aPinned - bPinned;
+  })
+  .slice(0, 4);
+
 const crumbs = [
   { name: 'Strona główna', path: '/' },
   { name: topic.title, path: topicPath(article.data.topic) },
@@ -32,10 +46,12 @@ const crumbs = [
 ---
 
 <BaseLayout
-  title={article.data.title}
+  title={article.data.seoTitle ?? article.data.title}
   description={article.data.description}
   canonicalPath={articlePath(article.id)}
   ogType="article"
+  ogImage={article.data.image}
+  ogImageAlt={article.data.imageAlt}
   jsonLd={jsonLd([
     articleSchema({
       title: article.data.title,
@@ -44,6 +60,7 @@ const crumbs = [
       pubDate: published,
       updatedDate: article.data.updatedDate,
       topic: article.data.topic,
+      image: article.data.image,
     }),
     breadcrumbSchema([
       { name: 'Strona główna', path: '/' },
@@ -56,17 +73,43 @@ const crumbs = [
   <Breadcrumbs items={crumbs} />
   <article class="content">
     <p class="meta">
-      <a href={topicPath(article.data.topic)}>{topic.title}</a>
-      ·
+      <a class="topic-tag" href={topicPath(article.data.topic)}>{topic.title}</a>
       <time datetime={updated.toISOString()}>
         Aktualizacja: {updated.toLocaleDateString('pl-PL')}
       </time>
     </p>
     <h1 class="page-title">{article.data.title}</h1>
+    {
+      article.data.image && article.data.imageAlt && (
+        <figure
+          class:list={[
+            'hero-image',
+            article.data.imageKind === 'illustration' && 'hero-image--illustration',
+          ]}
+        >
+          <img src={article.data.image} alt={article.data.imageAlt} />
+        </figure>
+      )
+    }
     <Content />
+    <Glossary items={article.data.glossary} />
     <Faq items={article.data.faq} />
+    {
+      related.length > 0 && (
+        <section class="related" aria-labelledby="powiazane">
+          <h2 id="powiazane">Powiązane poradniki</h2>
+          <ul>
+            {related.map((item) => (
+              <li>
+                <a href={articlePath(item.id)}>{item.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
     <p>
-      Więcej w temacie: <a href={topicPath(article.data.topic)}>{topic.title}</a>.
+      Wróć do przewodnika: <a href={topicPath(article.data.topic)}>{topic.title}</a>.
     </p>
   </article>
 </BaseLayout>

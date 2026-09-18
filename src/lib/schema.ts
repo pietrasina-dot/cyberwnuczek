@@ -1,42 +1,62 @@
-import { SITE, TOPICS, absoluteUrl, articlePath, topicPath, type TopicId } from './site';
+import {
+  SITE,
+  TOPICS,
+  MAIN_NAV,
+  absoluteUrl,
+  articlePath,
+  topicPath,
+  type TopicId,
+} from './site';
 
 type FAQ = {
   question: string;
   answer: string;
 };
 
-export function websiteSchema() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: SITE.name,
-    url: SITE.url,
-    inLanguage: SITE.language,
-    description: SITE.description,
-    publisher: organizationSchema(),
-  };
-}
+export const ORGANIZATION_ID = `${SITE.url}/#organization`;
+export const WEBSITE_ID = `${SITE.url}/#website`;
 
 export function organizationSchema() {
   return {
     '@type': 'Organization',
+    '@id': ORGANIZATION_ID,
     name: SITE.name,
     url: SITE.url,
-    email: SITE.email,
+    description: SITE.description,
   };
 }
 
-export function personSchema() {
+export function websiteSchema() {
   return {
-    '@type': 'Person',
-    name: SITE.author.name,
-    url: absoluteUrl(SITE.author.path),
+    '@type': 'WebSite',
+    '@id': WEBSITE_ID,
+    name: SITE.name,
+    url: SITE.url,
+    inLanguage: SITE.language,
+    description: SITE.description,
+    publisher: { '@id': ORGANIZATION_ID },
   };
+}
+
+export function siteNavigationSchema() {
+  return {
+    '@type': 'ItemList',
+    name: 'Nawigacja',
+    itemListElement: MAIN_NAV.map((item, index) => ({
+      '@type': 'SiteNavigationElement',
+      position: index + 1,
+      name: item.label,
+      url: absoluteUrl(item.href),
+    })),
+  };
+}
+
+export function globalSchema() {
+  return [organizationSchema(), websiteSchema(), siteNavigationSchema()];
 }
 
 export function breadcrumbSchema(items: { name: string; path: string }[]) {
   return {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => ({
       '@type': 'ListItem',
@@ -51,7 +71,6 @@ export function faqSchema(faq: FAQ[]) {
   if (!faq.length) return null;
 
   return {
-    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: faq.map((item) => ({
       '@type': 'Question',
@@ -71,11 +90,11 @@ export function articleSchema(input: {
   pubDate: Date;
   updatedDate?: Date;
   topic: TopicId;
+  image?: string;
 }) {
   const url = absoluteUrl(articlePath(input.slug));
 
   return {
-    '@context': 'https://schema.org',
     '@type': 'Article',
     headline: input.title,
     description: input.description,
@@ -84,30 +103,67 @@ export function articleSchema(input: {
     dateModified: (input.updatedDate ?? input.pubDate).toISOString(),
     mainEntityOfPage: url,
     url,
-    author: personSchema(),
-    publisher: organizationSchema(),
+    author: { '@id': ORGANIZATION_ID },
+    publisher: { '@id': ORGANIZATION_ID },
     articleSection: TOPICS[input.topic].title,
+    ...(input.image
+      ? { image: [absoluteUrl(input.image)] }
+      : {}),
+    about: {
+      '@type': 'Thing',
+      name: TOPICS[input.topic].title,
+    },
+    isPartOf: {
+      '@type': 'CollectionPage',
+      name: TOPICS[input.topic].title,
+      url: absoluteUrl(topicPath(input.topic)),
+    },
   };
 }
 
 export function topicSchema(topic: TopicId, url: string) {
   return {
-    '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: TOPICS[topic].title,
     description: TOPICS[topic].description,
     url,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: SITE.name,
-      url: SITE.url,
+    inLanguage: SITE.language,
+    isPartOf: { '@id': WEBSITE_ID },
+    about: {
+      '@type': 'Thing',
+      name: TOPICS[topic].title,
     },
   };
 }
 
+export function webPageSchema(input: {
+  name: string;
+  description: string;
+  path: string;
+  type?: 'WebPage' | 'AboutPage' | 'CollectionPage';
+  dateModified?: string;
+}) {
+  return {
+    '@type': input.type ?? 'WebPage',
+    name: input.name,
+    description: input.description,
+    url: absoluteUrl(input.path),
+    inLanguage: SITE.language,
+    isPartOf: { '@id': WEBSITE_ID },
+    ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+  };
+}
+
 export function jsonLd(data: unknown | unknown[]): string {
-  const graph = Array.isArray(data) ? data.filter(Boolean) : [data];
-  return JSON.stringify(graph.length === 1 ? graph[0] : graph, null, 0);
+  const graph = (Array.isArray(data) ? data : [data]).filter(Boolean);
+  return JSON.stringify(
+    {
+      '@context': 'https://schema.org',
+      '@graph': graph,
+    },
+    null,
+    0,
+  );
 }
 
 export { topicPath };

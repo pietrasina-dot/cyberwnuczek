@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { SITE } from '../lib/site';
+import { MAIN_NAV, SITE, documentTitle } from '../lib/site';
+import { globalSchema, jsonLd as toJsonLd } from '../lib/schema';
 
 type Props = {
   title: string;
@@ -9,6 +10,8 @@ type Props = {
   jsonLd?: string;
   noindex?: boolean;
   ogType?: 'website' | 'article';
+  ogImage?: string;
+  ogImageAlt?: string;
 };
 
 const {
@@ -18,12 +21,20 @@ const {
   jsonLd,
   noindex = false,
   ogType = 'website',
+  ogImage,
+  ogImageAlt,
 } = Astro.props;
+const ogImageUrl = ogImage ? new URL(ogImage, SITE.url).toString() : undefined;
 
-const pageTitle = title === SITE.name ? SITE.name : `${title} | ${SITE.name}`;
+const pageTitle = documentTitle(title);
 const canonical = new URL(canonicalPath, SITE.url).toString();
 const gsc = import.meta.env.PUBLIC_GSC_VERIFICATION;
-const ga = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const globalJsonLd = toJsonLd(globalSchema());
+
+function isCurrent(href: string) {
+  return path === href || path.startsWith(`${href}/`);
+}
 ---
 
 <!doctype html>
@@ -40,40 +51,47 @@ const ga = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={SITE.locale} />
     <meta property="og:site_name" content={SITE.name} />
-    <meta name="twitter:card" content="summary" />
+    {
+      ogImageUrl && (
+        <>
+          <meta property="og:image" content={ogImageUrl} />
+          {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:image" content={ogImageUrl} />
+        </>
+      )
+    }
+    {!ogImageUrl && <meta name="twitter:card" content="summary" />}
     {noindex && <meta name="robots" content="noindex,follow" />}
     {gsc && <meta name="google-site-verification" content={gsc} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    <script type="application/ld+json" set:html={globalJsonLd} />
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
-    {
-      ga && (
-        <>
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga}`}></script>
-          <script is:inline define:vars={{ ga }}>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-              window.dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', ga, { anonymize_ip: true });
-          </script>
-        </>
-      )
-    }
   </head>
   <body>
     <a class="skip-link" href="#tresc">Przejdź do treści</a>
     <header class="site-header">
       <div class="wrap site-header__inner">
-        <a class="logo" href="/">{SITE.name}</a>
+        <a class="logo" href="/">
+          <img
+            class="logo__mark"
+            src="/favicon.svg"
+            width="48"
+            height="48"
+            alt=""
+            aria-hidden="true"
+          />
+          <span>{SITE.name}</span>
+        </a>
         <nav class="nav" aria-label="Główne">
-          <a href="/poradniki">Poradniki</a>
-          <a href="/tematy/oszustwa-internetowe">Oszustwa</a>
-          <a href="/tematy/hasla-i-konta">Hasła</a>
-          <a href="/tematy/bankowosc-online">Bankowość</a>
-          <a href="/tematy/smartfon">Smartfon</a>
-          <a href="/o-mnie">O stronie</a>
+          {
+            MAIN_NAV.map((item) => (
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
         </nav>
       </div>
     </header>
@@ -81,16 +99,20 @@ const ga = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="wrap">
-        <nav aria-label="Stopka">
+      <div class="wrap site-footer__inner">
+        <div class="site-footer__brand">
+          <p class="site-footer__name">{SITE.name}</p>
+          <p>{SITE.tagline}</p>
+        </div>
+        <nav class="site-footer__nav" aria-label="Stopka">
           <a href="/">Strona główna</a>
           <a href="/poradniki">Poradniki</a>
           <a href="/o-mnie">O stronie</a>
+          <a href="/polityka-prywatnosci">Prywatność</a>
+          <a href="/nota-prawna">Nota prawna</a>
           <a href="/rss.xml">RSS</a>
         </nav>
-        <p>
-          {SITE.name} — {SITE.tagline}
-        </p>
+        <p class="site-footer__note">Nie zbieramy maili. Nie ma newslettera.</p>
       </div>
     </footer>
   </body>

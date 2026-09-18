@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { breadcrumbSchema, jsonLd, webPageSchema } from '../lib/schema';
+
+const title = 'Polityka prywatności — bez zbierania maili';
+const description =
+  'Polityka prywatności CyberWnuczka: nie zbieramy e-maili, nie ma formularza ani newslettera. Hosting może zapisać tylko techniczne dane połączenia.';
+
+const crumbs = [
+  { name: 'Strona główna', path: '/' },
+  { name: 'Polityka prywatności' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/polityka-prywatnosci"
+  jsonLd={jsonLd([
+    webPageSchema({
+      name: title,
+      description,
+      path: '/polityka-prywatnosci',
+      dateModified: '2026-09-18',
+    }),
+    breadcrumbSchema([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Polityka prywatności', path: '/polityka-prywatnosci' },
+    ]),
+  ])}
+>
+  <Breadcrumbs items={crumbs} />
+  <article class="content">
+    <h1 class="page-title">Polityka prywatności</h1>
+    <p class="meta">Ostatnia aktualizacja: 18 września 2026</p>
+    <p>
+      Serwis <strong>CyberWnuczek</strong> (adres kanoniczny:
+      <a href="https://www.cyber-wnuczek.pl">www.cyber-wnuczek.pl</a>) jest stroną
+      informacyjną. <strong>Nie zbieramy kontaktów ani adresów e-mail.</strong>
+      Nie ma kont użytkowników, komentarzy, formularzy, newslettera ani czatu.
+    </p>
+
+    <h2>Kto prowadzi serwis</h2>
+    <p>
+      Serwis jest prowadzony niekomercyjnie, bez sprzedaży i bez profilu firmy na
+      stronie. Nie przetwarzamy danych w celu marketingu, profilowania ani
+      przekazywania ich reklamodawcom.
+    </p>
+
+    <h2>Czego nie robimy</h2>
+    <ul>
+      <li>nie prosimy o imię, telefon ani e-mail,</li>
+      <li>nie włączamy Google Analytics ani pikseli reklamowych,</li>
+      <li>nie ustawiamy własnych plików cookie do śledzenia,</li>
+      <li>nie prowadzimy list mailingowych.</li>
+    </ul>
+
+    <h2>Co może się pojawić przy samym wejściu na stronę</h2>
+    <p>
+      Żeby strona w ogóle się otworzyła, hosting (Cloudflare Pages) może zapisać
+      techniczne dane połączenia, np. adres IP, datę i przeglądarką. To jest
+      obsługa żądania HTTP, nie nasza baza kontaktów. Nie łączymy tych logów z
+      osobą i nie używamy ich do newslettera.
+    </p>
+    <p>
+      Google Search Console, jeśli kiedyś zostanie podłączona, służy wyłącznie
+      właścicielowi do sprawdzenia indeksowania. Nie jest to analityka
+      zachowań czytelników na stronie.
+    </p>
+
+    <h2>Pliki cookie</h2>
+    <p>
+      Nie wdrażamy banera cookie, bo nie używamy cookie marketingowych ani
+      analitycznych. Jeśli przeglądarka lub sieć doda własne cookie, to nie
+      wynika z kodu tej strony.
+    </p>
+
+    <h2>Prawa wynikające z RODO</h2>
+    <p>
+      Skoro nie prowadzimy bazy osób (maili, kont, formularzy), nie mamy czego
+      poprawiać ani usuwać „z konta”. Jeśli uważasz, że mimo to doszło do
+      przetwarzania Twoich danych, możesz złożyć skargę do Prezesa Urzędu
+      Ochrony Danych Osobowych.
+    </p>
+    <p>
+      Ta strona opisuje praktykę serwisu. Nie jest indywidualną poradą prawną.
+      Zobacz też <a href="/nota-prawna">notę prawną</a>.
+    </p>
+  </article>
+</BaseLayout>

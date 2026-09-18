@@ -11,7 +11,7 @@ const { items } = Astro.props as { items: Crumb[] };
   {
     items.map((item, index) => (
       <>
-        {index > 0 && <span aria-hidden="true">/</span>}
+        {index > 0 && <span aria-hidden="true">›</span>}
         {item.path ? <a href={item.path}>{item.name}</a> : <span>{item.name}</span>}
       </>
     ))

@@ -3,30 +3,60 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
-import { breadcrumbSchema, jsonLd } from '../../lib/schema';
+import { TOPICS, topicPath, type TopicId } from '../../lib/site';
+import { breadcrumbSchema, jsonLd, webPageSchema } from '../../lib/schema';
+
+const description =
+  'Wszystkie poradniki CyberWnuczka w czterech tematach: oszustwa internetowe, hasła i konta, bankowość online oraz smartfon. Krótkie instrukcje od razu do użycia.';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const byTopic = (Object.keys(TOPICS) as TopicId[]).map((topicId) => ({
+  topicId,
+  topic: TOPICS[topicId],
+  articles: articles.filter((article) => article.data.topic === topicId),
+}));
 ---
 
 <BaseLayout
-  title="Poradniki"
-  description="Wszystkie poradniki CyberWnuczka: oszustwa, hasła, bankowość i smartfon."
+  title="Poradniki o oszustwach, hasłach i banku"
+  description={description}
   canonicalPath="/poradniki"
-  jsonLd={jsonLd(
+  jsonLd={jsonLd([
+    webPageSchema({
+      name: 'Poradniki',
+      description,
+      path: '/poradniki',
+      type: 'CollectionPage',
+    }),
     breadcrumbSchema([
       { name: 'Strona główna', path: '/' },
       { name: 'Poradniki', path: '/poradniki' },
     ]),
-  )}
+  ])}
 >
   <Breadcrumbs items={[{ name: 'Strona główna', path: '/' }, { name: 'Poradniki' }]} />
   <section class="hero">
+    <p class="eyebrow">Od oszustw po smartfon</p>
     <h1>Poradniki</h1>
-    <p class="lede">Krótkie instrukcje, które da się zastosować od razu.</p>
+    <p class="lede">
+      Krótkie instrukcje o oszustwach, hasłach, bankowości i smartfonie, które da się
+      zastosować od razu.
+    </p>
   </section>
-  <section class="article-list">
-    {articles.map((article) => <ArticleCard article={article} />)}
-  </section>
+  {
+    byTopic.map(({ topicId, topic, articles: topicArticles }) => (
+      <section class="article-list" aria-labelledby={`temat-${topicId}`}>
+        <h2 id={`temat-${topicId}`}>
+          <a href={topicPath(topicId)}>{topic.title}</a>
+        </h2>
+        <p>{topic.intro}</p>
+        {topicArticles.map((article) => (
+          <ArticleCard article={article} />
+        ))}
+      </section>
+    ))
+  }
 </BaseLayout>
