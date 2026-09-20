@@ -8,6 +8,7 @@ export const GET: APIRoute = () => {
     'Disallow: /404',
     '',
     `Sitemap: ${SITE.url}/sitemap-index.xml`,
+    `Sitemap: ${SITE.url}/sitemap.xml`,
     '',
   ].join('\n');
 

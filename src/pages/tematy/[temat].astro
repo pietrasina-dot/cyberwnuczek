@@ -82,7 +82,9 @@ const crumbs = [
     <h2 id="poradniki-tematu">Poradniki w temacie</h2>
     {
       articles.length ? (
-        articles.map((article) => <ArticleCard article={article} />)
+        <div class="article-list__items">
+          {articles.map((article) => <ArticleCard article={article} />)}
+        </div>
       ) : (
         <p>W tym temacie wkrótce pojawią się poradniki.</p>
       )

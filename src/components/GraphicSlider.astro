@@ -1,0 +1,162 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { articlePath } from '../lib/site';
+
+const { articles } = Astro.props as { articles: CollectionEntry<'articles'>[] };
+const slides = articles.filter((article) => article.data.image).slice(0, 5);
+---
+
+{
+  slides.length > 0 && (
+    <section
+      class="graphic-slider"
+      id="graphic-slider"
+      aria-roledescription="karuzela"
+      aria-label="Najnowsze grafiki"
+    >
+      <p class="eyebrow">Najnowsze grafiki</p>
+      <p class="visually-hidden" data-status aria-live="polite">
+        Grafika 1 z {slides.length}: {slides[0].data.title}
+      </p>
+      <div class="graphic-slider__stage">
+        {
+          slides.map((article, index) => (
+            <a
+              class:list={['graphic-slider__slide', index === 0 && 'is-active']}
+              href={articlePath(article.id)}
+              data-slide
+              data-title={article.data.title}
+              aria-hidden={index === 0 ? 'false' : 'true'}
+              inert={index === 0 ? undefined : true}
+              tabindex={index === 0 ? 0 : -1}
+            >
+              <span
+                class:list={[
+                  'graphic-slider__media',
+                  article.data.imageKind === 'illustration' &&
+                    'graphic-slider__media--illustration',
+                ]}
+              >
+                <img
+                  src={article.data.image}
+                  alt={article.data.imageAlt ?? ''}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </span>
+              <span class="graphic-slider__caption">
+                <span class="graphic-slider__title">{article.data.title}</span>
+                <span class="card__more">Czytaj poradnik</span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      {
+        slides.length > 1 && (
+          <div class="graphic-slider__toolbar">
+            <button type="button" class="graphic-slider__arrow" data-prev>
+              Poprzednia
+            </button>
+            <div class="graphic-slider__dots" role="group" aria-label="Wybór grafiki">
+              {slides.map((article, index) => (
+                <button
+                  type="button"
+                  class="graphic-slider__dot"
+                  data-dot
+                  aria-label={`Grafika ${index + 1}: ${article.data.title}`}
+                  aria-current={index === 0 ? 'true' : 'false'}
+                />
+              ))}
+            </div>
+            <button type="button" class="graphic-slider__arrow" data-next>
+              Następna
+            </button>
+            <button type="button" class="graphic-slider__pause" data-pause>
+              Zatrzymaj
+            </button>
+          </div>
+        )
+      }
+    </section>
+  )
+}
+
+<script>
+  const root = document.getElementById('graphic-slider');
+  if (root) {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-next]');
+    const pauseBtn = root.querySelector<HTMLButtonElement>('[data-pause]');
+    const status = root.querySelector<HTMLElement>('[data-status]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer = 0;
+    let playing = slides.length > 1 && !reduceMotion;
+
+    const show = (to: number) => {
+      index = (to + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const on = i === index;
+        slide.classList.toggle('is-active', on);
+        slide.setAttribute('aria-hidden', on ? 'false' : 'true');
+        slide.tabIndex = on ? 0 : -1;
+        if (on) slide.removeAttribute('inert');
+        else slide.setAttribute('inert', '');
+      });
+      dots.forEach((dot, i) => {
+        if (i === index) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+      const title = slides[index]?.dataset.title ?? '';
+      if (status) status.textContent = `Grafika ${index + 1} z ${slides.length}: ${title}`;
+    };
+
+    const stopTimer = () => {
+      window.clearInterval(timer);
+      timer = 0;
+    };
+
+    const startTimer = () => {
+      stopTimer();
+      if (!playing) return;
+      timer = window.setInterval(() => show(index + 1), 8000);
+    };
+
+    const setPlaying = (on: boolean) => {
+      playing = on && slides.length > 1 && !reduceMotion;
+      if (pauseBtn) pauseBtn.textContent = playing ? 'Zatrzymaj' : 'Odtwórz';
+      if (playing) startTimer();
+      else stopTimer();
+    };
+
+    prev?.addEventListener('click', () => {
+      show(index - 1);
+      if (playing) startTimer();
+    });
+    next?.addEventListener('click', () => {
+      show(index + 1);
+      if (playing) startTimer();
+    });
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        show(i);
+        if (playing) startTimer();
+      });
+    });
+    pauseBtn?.addEventListener('click', () => setPlaying(!playing));
+    root.addEventListener('mouseenter', stopTimer);
+    root.addEventListener('mouseleave', () => {
+      if (playing) startTimer();
+    });
+    root.addEventListener('focusin', stopTimer);
+    root.addEventListener('focusout', (event) => {
+      if (!root.contains(event.relatedTarget as Node | null) && playing) startTimer();
+    });
+
+    if (reduceMotion && pauseBtn) pauseBtn.hidden = true;
+    setPlaying(playing);
+  }
+</script>

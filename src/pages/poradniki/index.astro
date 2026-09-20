@@ -53,9 +53,11 @@ const byTopic = (Object.keys(TOPICS) as TopicId[]).map((topicId) => ({
           <a href={topicPath(topicId)}>{topic.title}</a>
         </h2>
         <p>{topic.intro}</p>
-        {topicArticles.map((article) => (
-          <ArticleCard article={article} />
-        ))}
+        <div class="article-list__items">
+          {topicArticles.map((article) => (
+            <ArticleCard article={article} />
+          ))}
+        </div>
       </section>
     ))
   }

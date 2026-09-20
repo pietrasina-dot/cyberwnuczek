@@ -2,18 +2,22 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import GraphicSlider from '../components/GraphicSlider.astro';
 import { SITE, TOPICS, topicPath } from '../lib/site';
 import { jsonLd, webPageSchema } from '../lib/schema';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+const featuredImage = articles.find((article) => article.data.image);
 ---
 
 <BaseLayout
   title={SITE.homeTitle}
   description={SITE.description}
   canonicalPath="/"
+  ogImage={featuredImage?.data.image}
+  ogImageAlt={featuredImage?.data.imageAlt}
   jsonLd={jsonLd(
     webPageSchema({
       name: SITE.homeTitle,
@@ -22,6 +26,7 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft)).so
     }),
   )}
 >
+  <GraphicSlider articles={articles} />
   <section class="hero">
     <p class="eyebrow">Poradniki o bezpieczeństwie w internecie</p>
     <h1>Internet bez paniki.</h1>
@@ -54,7 +59,9 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft)).so
 
   <section class="article-list" aria-labelledby="najnowsze">
     <h2 id="najnowsze">Najnowsze poradniki</h2>
-    {articles.map((article) => <ArticleCard article={article} />)}
+    <div class="article-list__items">
+      {articles.map((article) => <ArticleCard article={article} />)}
+    </div>
     <p>
       <a class="button button--ghost" href="/poradniki">Wszystkie poradniki</a>
     </p>

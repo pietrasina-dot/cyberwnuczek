@@ -6,25 +6,29 @@ const { article } = Astro.props as { article: CollectionEntry<'articles'> };
 const date = article.data.updatedDate ?? article.data.pubDate;
 ---
 
-<a class="card" href={articlePath(article.id)}>
+<a class="card card--listing" href={articlePath(article.id)}>
   {
     article.data.image && article.data.imageAlt && (
-      <img
-        class:list={[
-          'card__img',
-          article.data.imageKind === 'illustration' && 'card__img--illustration',
-        ]}
-        src={article.data.image}
-        alt={article.data.imageAlt}
-      />
+      <span class="card__media">
+        <img
+          class:list={[
+            'card__img',
+            article.data.imageKind === 'illustration' && 'card__img--illustration',
+          ]}
+          src={article.data.image}
+          alt={article.data.imageAlt}
+        />
+      </span>
     )
   }
-  <h3>{article.data.title}</h3>
-  <p>{article.data.description}</p>
-  <p class="meta">
-    <time datetime={date.toISOString()}>
-      {date.toLocaleDateString('pl-PL')}
-    </time>
-  </p>
-  <span class="card__more">Czytaj poradnik</span>
+  <span class="card__body">
+    <h3>{article.data.title}</h3>
+    <p>{article.data.description}</p>
+    <span class="card__meta">
+      <time datetime={date.toISOString()}>
+        {date.toLocaleDateString('pl-PL')}
+      </time>
+      <span class="card__more">Czytaj poradnik</span>
+    </span>
+  </span>
 </a>
