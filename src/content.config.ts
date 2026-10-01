@@ -18,7 +18,7 @@ const articles = defineCollection({
     related: z.array(z.string()).default([]),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
-    imageKind: z.enum(['photo', 'illustration']).default('photo'),
+    imageKind: z.enum(['photo', 'illustration', 'icon']).default('photo'),
     draft: z.boolean().default(false),
     faq: z
       .array(

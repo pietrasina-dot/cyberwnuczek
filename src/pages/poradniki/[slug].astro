@@ -85,6 +85,7 @@ const crumbs = [
           class:list={[
             'hero-image',
             article.data.imageKind === 'illustration' && 'hero-image--illustration',
+            article.data.imageKind === 'icon' && 'hero-image--icon',
           ]}
         >
           <img src={article.data.image} alt={article.data.imageAlt} />

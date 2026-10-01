@@ -7,7 +7,9 @@ import { SITE, TOPICS, topicPath } from '../lib/site';
 import { jsonLd, webPageSchema } from '../lib/schema';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) =>
+    (b.data.updatedDate ?? b.data.pubDate).valueOf() -
+    (a.data.updatedDate ?? a.data.pubDate).valueOf(),
 );
 const featuredImage = articles.find((article) => article.data.image);
 ---

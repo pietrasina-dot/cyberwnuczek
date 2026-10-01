@@ -6,6 +6,13 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 
 ## Użyte
 
+### `public/images/oszustwo-na-wnuczka-ikona.webp`
+
+- Plik: oryginalna ikona wygenerowana na potrzeby CyberWnuczka (słuchawka i tarcza z sercem).
+- Licencja: własność serwisu; nie jest to zdjęcie stockowe ani znak Policji, NASK ani banku.
+- Artykuł: jak-rozpoznac-oszustwo-na-wnuczka
+- Uwaga: zastąpiła wcześniejsze zdjęcie telefonu tarczowego CC0.
+
 ### `public/images/skrzynka-pocztowa.webp`
 
 - Plik źródłowy: File:Old mail box.jpg
@@ -25,7 +32,7 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 - Strona licencji: https://commons.wikimedia.org/wiki/File:Antique_Rotary_Phone.jpg oraz https://creativecommons.org/publicdomain/zero/1.0/deed.en
 - Licencja: CC0 1.0 (API Commons: AttributionRequired=false)
 - Autor na Commons: Amitbalani, own work
-- Artykuł: jak-rozpoznac-oszustwo-na-wnuczka
+- Artykuł: nieużywane od 1 października 2026 (zastąpione ikoną oszustwo-na-wnuczka-ikona.webp)
 
 ### `public/images/trzy-klodki.webp`
 

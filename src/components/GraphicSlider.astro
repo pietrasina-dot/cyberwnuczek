@@ -35,6 +35,7 @@ const slides = articles.filter((article) => article.data.image).slice(0, 5);
                   'graphic-slider__media',
                   article.data.imageKind === 'illustration' &&
                     'graphic-slider__media--illustration',
+                  article.data.imageKind === 'icon' && 'graphic-slider__media--icon',
                 ]}
               >
                 <img

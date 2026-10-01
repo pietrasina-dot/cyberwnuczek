@@ -35,7 +35,7 @@ export const TOPICS = {
       {
         heading: 'Oszustwo na wnuczka',
         teaser:
-          'Nagła prośba o pieniądze i tajemnicę. Rozłącz się i zadzwoń na numer, który znasz od lat.',
+          'Nagła prośba o pieniądze i tajemnicę. Rozłącz się, zadzwoń na znany numer i nie przekazuj gotówki osobie, która ma po nie przyjść.',
         articleId: 'jak-rozpoznac-oszustwo-na-wnuczka',
       },
       {
