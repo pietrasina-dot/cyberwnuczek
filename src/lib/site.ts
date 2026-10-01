@@ -41,7 +41,7 @@ export const TOPICS = {
       {
         heading: 'Phishing w mailu i SMS',
         teaser:
-          'Wiadomość straszy i prosi o kliknięcie. Nie loguj się z linku — wejdź na stronę banku albo urzędu sam.',
+          'Fałszywy mail albo SMS o paczce, koncie albo urzędzie. Nie korzystaj z linku — wejdź na stronę firmy samodzielnie.',
         articleId: 'phishing-mail-sms-jak-sprawdzic',
       },
     ],

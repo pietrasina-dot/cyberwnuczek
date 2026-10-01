@@ -13,6 +13,13 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 - Artykuł: jak-rozpoznac-oszustwo-na-wnuczka
 - Uwaga: zastąpiła wcześniejsze zdjęcie telefonu tarczowego CC0.
 
+### `public/images/phishing-ikona.webp`
+
+- Plik: oryginalna ikona wygenerowana na potrzeby CyberWnuczka (koperta i tarcza z wykrzyknikiem).
+- Licencja: własność serwisu; nie jest to zdjęcie stockowe ani znak CERT, NASK, UOKiK ani banku.
+- Artykuł: phishing-mail-sms-jak-sprawdzic
+- Uwaga: zastąpiła wcześniejsze zdjęcie skrzynki pocztowej CC0.
+
 ### `public/images/skrzynka-pocztowa.webp`
 
 - Plik źródłowy: File:Old mail box.jpg
@@ -21,7 +28,7 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 - Strona licencji: https://commons.wikimedia.org/wiki/File:Old_mail_box.jpg (sekcja Licensing) oraz https://creativecommons.org/publicdomain/zero/1.0/deed.en
 - Licencja: CC0 1.0 (API Commons: LicenseShortName=CC0, AttributionRequired=false)
 - Autor na Commons: PookieFugglestein, own work
-- Artykuł: phishing-mail-sms-jak-sprawdzic
+- Artykuł: nieużywane od 1 października 2026 (zastąpione ikoną phishing-ikona.webp)
 - Uwaga: na skrzynce jest napis „U.S. MAIL” jako część fotografowanego przedmiotu, nie logo banku ani komunikatora.
 
 ### `public/images/telefon-tarczowy.webp`
