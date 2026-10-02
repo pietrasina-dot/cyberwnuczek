@@ -58,7 +58,7 @@ export const TOPICS = {
       {
         heading: 'Prosty system haseł',
         teaser:
-          'Trzy poziomy: bank i poczta osobno, reszta w menedżerze, nigdy to samo wszędzie.',
+          'Unikalne hasła, menedżer i 2FA. Nie zmieniaj haseł bez powodu — zacznij od poczty i banku.',
         articleId: 'hasla-dla-seniorow',
       },
     ],

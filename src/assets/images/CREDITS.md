@@ -41,6 +41,13 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 - Autor na Commons: Amitbalani, own work
 - Artykuł: nieużywane od 1 października 2026 (zastąpione ikoną oszustwo-na-wnuczka-ikona.webp)
 
+### `public/images/hasla-ikona.webp`
+
+- Plik: oryginalna ikona wygenerowana na potrzeby CyberWnuczka (klucz i tarcza).
+- Licencja: własność serwisu; nie jest to zdjęcie stockowe ani znak CERT, NASK ani banku.
+- Artykuł: hasla-dla-seniorow
+- Uwaga: zastąpiła wcześniejsze zdjęcie trzech kłódek CC0.
+
 ### `public/images/trzy-klodki.webp`
 
 - Plik źródłowy: File:Three padlocks.jpg
@@ -49,7 +56,7 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 - Strona licencji: https://commons.wikimedia.org/wiki/File:Three_padlocks.jpg oraz https://creativecommons.org/publicdomain/zero/1.0/deed.en
 - Licencja: CC0 1.0 (API Commons: AttributionRequired=false)
 - Autor na Commons: Mx. Granger, own work
-- Artykuł: hasla-dla-seniorow
+- Artykuł: nieużywane od 2 października 2026 (zastąpione ikoną hasla-ikona.webp)
 
 ### `public/images/portfel-skorzany.webp`
 
