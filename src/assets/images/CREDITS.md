@@ -6,6 +6,13 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 
 ## Użyte
 
+### `public/images/oszustwo-na-policjanta-ikona.webp`
+
+- Plik: oryginalna ikona wygenerowana na potrzeby CyberWnuczka (czapka i tarcza z wykrzyknikiem).
+- Licencja: własność serwisu; nie jest to zdjęcie stockowe ani znak Policji, NASK ani banku.
+- Artykuł: oszustwo-na-policjanta-jak-rozpoznac
+- Uwaga: motyw ogólny, bez gwiazdy Policji, orła ani numeru odznaki.
+
 ### `public/images/oszustwo-na-wnuczka-ikona.webp`
 
 - Plik: oryginalna ikona wygenerowana na potrzeby CyberWnuczka (słuchawka i tarcza z sercem).
@@ -47,6 +54,18 @@ Licencja CC0: https://creativecommons.org/publicdomain/zero/1.0/deed.pl
 - Licencja: własność serwisu; nie jest to zdjęcie stockowe ani znak CERT, NASK ani banku.
 - Artykuł: hasla-dla-seniorow
 - Uwaga: zastąpiła wcześniejsze zdjęcie trzech kłódek CC0.
+
+### `public/images/falszywy-sms-ikona.webp`
+
+- Plik: oryginalna ikona wygenerowana na potrzeby CyberWnuczka (telefon z dymkiem SMS i trójkąt ostrzegawczy).
+- Licencja: własność serwisu; nie jest to zdjęcie stockowe ani znak operatora, CERT, NASK ani banku.
+- Artykuł: falszywy-sms-jak-rozpoznac
+
+### `public/images/oszustwo-na-pracownika-banku-ikona.webp`
+
+- Plik: oryginalna ikona wygenerowana na potrzeby CyberWnuczka (budynek banku i tarcza z wykrzyknikiem).
+- Licencja: własność serwisu; nie jest to zdjęcie stockowe ani znak CERT, NASK, ZBP ani banku.
+- Artykuł: oszustwo-na-pracownika-banku
 
 ### `public/images/trzy-klodki.webp`
 

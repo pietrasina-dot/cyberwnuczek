@@ -44,6 +44,24 @@ export const TOPICS = {
           'Fałszywy mail albo SMS o paczce, koncie albo urzędzie. Nie korzystaj z linku — wejdź na stronę firmy samodzielnie.',
         articleId: 'phishing-mail-sms-jak-sprawdzic',
       },
+      {
+        heading: 'Fałszywy SMS',
+        teaser:
+          'SMS o paczce, mandacie albo banku z linkiem. Nie klikaj — sprawdź sprawę samodzielnie i przekaż wiadomość na 8080.',
+        articleId: 'falszywy-sms-jak-rozpoznac',
+      },
+      {
+        heading: 'Oszustwo na pracownika banku',
+        teaser:
+          'Telefon o zagrożonym koncie i prośba o kod albo przelew. Rozłącz się i zadzwoń na numer banku z karty.',
+        articleId: 'oszustwo-na-pracownika-banku',
+      },
+      {
+        heading: 'Oszustwo na policjanta',
+        teaser:
+          'Dzwoni „policjant” i mówi, że pieniądze są zagrożone. Rozłącz się, nie przekazuj gotówki i sprawdź sprawę na 112.',
+        articleId: 'oszustwo-na-policjanta-jak-rozpoznac',
+      },
     ],
   },
   'hasla-i-konta': {
